@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本福岡旅遊行程</title>
+
+<style>
+:root{
+  --bg:#f7f5f2;
+  --card:#ffffff;
+  --text:#333;
+  --sub:#777;
+  --accent:#a8c6df;
+  --wood:#c8a27a;
+}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:18px;
+}
+
+header{
+  padding:16px;
+  text-align:center;
+  background:var(--card);
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+  position:sticky;
+  top:0;
+}
+
+.title{font-size:22px;font-weight:bold;}
+.date{font-size:14px;color:var(--sub);}
+
+.tabs{
+  display:flex;
+  overflow-x:auto;
+  padding:8px;
+  gap:8px;
+}
+
+.tab{
+  flex:0 0 auto;
+  padding:10px 14px;
+  background:var(--card);
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:var(--accent);
+  color:#fff;
+}
+
+.day{display:none;padding:12px;}
+.day.active{display:block;}
+
+.card{
+  background:var(--card);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 3px 8px rgba(0,0,0,0.06);
+}
+
+.item{
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+  cursor:pointer;
+}
+.item:last-child{border:none;}
+
+.time{font-weight:bold;color:var(--wood);}
+.note{font-size:14px;color:var(--sub);margin-top:4px;}
+
+/* 展開 */
+.expand{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.3s ease;
+}
+.expand.active{
+  max-height:none;
+}
+
+.expand img{
+  width:100%;
+  border-radius:12px;
+  margin-top:10px;
+}
+
+.desc{
+  font-size:14px;
+  color:var(--sub);
+  margin-top:8px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="title">九州福岡八天七夜</div>
+  <div class="date">2026/06/14 – 2026/06/21</div>
+</header>
+
+<div class="tabs" id="tabs"></div>
+<div id="content"></div>
+
+<script>
+const data = [
+{
+day:"Day1",
+items:[
+{time:"12:30–18:30",text:"✈️ 航班 IT270",note:"🛫 約14:10–17:50"},
+{time:"18:30–19:30",text:"機場 → 飯店"},
+{time:"19:30-20:30",text:"博多一雙 / 九ちゃん",desc:"博多人氣豚骨拉麵",img:"https://meee.com.tw/Qc25oFI.jpg"},
+{time:"20:30",text:"飯店Check in",note:"WBF格蘭德飯店 博多",desc:"〒812-0016 福岡県福岡市博多区博多駅南２丁目２−5"}
+]
+},
+{
+day:"Day2",
+items:[
+{time:"09:00-10:30",text:"Pain Stock 天神店",desc:"以招牌「明太子法國麵包」聞名。主打高保水的職人麵包，結合咖啡廳，環境幽靜，是天神地區的早餐與輕食熱門選擇",img:"https://meee.com.tw/B5GW54P.jpg"},
+{time:"10:30–12:30",text:"柳川遊船",desc:"九州代表水鄉體驗",img:"https://meee.com.tw/Sl6ESrU.jpg"},
+{time:"12:30-13:30",text:"一蘭拉麵 / 暖暮拉麵",desc:"一蘭拉麵「太宰府參道店」限定的合格麵，專為考生祈福，特色為五角形碗（音同日文「合格」）、特長麵條（象徵長久幸福）。碗底印有「決定」字樣，是極具特色的祈福美食。",img:"https://meee.com.tw/yrQdQ5Y.jpg"},
+{time:"13:30-17:30",text:"太宰府天滿宮",desc:"日本學問之神神社、兌換梅枝餅",img:"https://meee.com.tw/yQXwnhi.jpg"},
+{time:"17:30–20:30",text:"天神商圈逛街",desc:"晚餐 可吃：欣欣拉麵 / 兼虎沾麵 / 自理",img:"https://meee.com.tw/d9iHIyY.jpg"}
+]
+},
+{
+day:"Day3",
+items:[
+{time:"09:00-10:30",text:"Dacomecca",desc:"車站附近的排隊麵包店，為六本松名店「AMAM DACOTAN」的姐妹品牌，也是知名「I'm donut?」的系出同源品牌。",img:"https://meee.com.tw/clRTXMi.jpg"},
+{time:"10:30-12:30",text:"博多舊市街",desc:"承天寺、聖福寺、東長寺 歷史街區巡禮",img:"https://meee.com.tw/hCNHq17.jpg"},
+{time:"12:30-13:30",text:"焼肉処 石原牛",desc:"午餐 和牛燒肉",img:"https://meee.com.tw/oGzvjhq.jpg"},
+{time:"13:30–17:00",text:"櫛田神社",desc:"「博多總鎮守」。自 757 年創建以來，供奉不老長壽、生意興隆之神。這裡是聯合國教科文組織認定的「博多祇園山笠」祭典中心，全年展示巨大華麗的「飾山笠」。",img:"https://meee.com.tw/ZlqWxNA.jpg"},
+{time:"17:00–21:00",text:"博多運河城+中洲屋台",desc:"巨大複合式商業設施，以一條運河貫穿，集結多家購物、美食及娛樂店鋪。鄰近的「中洲屋台街」則是夜間特色；多家露天屋台沿河岸排開，提供拉麵、串燒等美食，是體驗當地餐飲文化的熱門地點",img:"https://meee.com.tw/BUmdRsl.jpg"}
+]
+},
+{
+day:"Day4（包車）",
+items:[
+{time:"08:00–10:30",text:"出發"},
+{time:"10:30–11:30",text:"上色見熊野座神社",desc:"因動漫《螢火之森》與《夏目友人帳》而爆紅的神秘景點。這裡以長滿青苔的石燈籠參道、幽靜的杉木林及巨大的「穿戶岩」聞名，被譽為通往異世界的入口，主祀良緣與消災解厄之神。",img:"https://meee.com.tw/Hb3wigq.jpg"},
+{time:"11:30–12:30",text:"高森田樂之里",desc:"午餐 炭火鄉土料理",img:"https://meee.com.tw/t6bVeJS.jpg"},
+{time:"12:30–13:30",text:"白川水源",desc:"日本名水百選",img:"https://meee.com.tw/Z7Ak9XO.jpg"},
+{time:"13:30–16:00",text:"草千里",desc:"阿蘇草原絕景",img:"https://meee.com.tw/u7AUj7U.jpg"},{time:"16:00–18:30",text:"回程"},{time:"18:30–20:00",text:"前田屋 総本店 ",desc:"晚餐 牛腸鍋",img:"https://meee.com.tw/CS5c7FA.jpg"}
+]
+},
+{
+day:"Day5（包車）",
+items:[
+{time:"08:00–10:30",text:"出發"},
+{time:"10:30–12:30",text:"由布院、金鱗湖",desc:"溫泉小鎮與夢幻湖",img:"https://meee.com.tw/dFDdD2z.jpg"},
+{time:"12:30-13:30",text:"龜之井別莊 湯之岳庵",desc:"由布院頂級御三家之一，提供時令山菜、豐後牛等山家料理",img:"https://meee.com.tw/F41CGdh.jpg"},
+{time:"13:30–16:00",text:"別府地獄溫泉",desc:"彩色溫泉景觀 海地獄為主",img:"https://meee.com.tw/n78BSWP.jpg"},
+{time:"16:00-17:00",text:"地獄蒸",desc:"晚餐 地獄蒸料理 來不及就Pass",img:"https://meee.com.tw/d6Xi33H.jpg"},{time:"17:00–18:30",text:"回程"}
+]
+},
+{
+day:"Day6",
+items:[
+{time:"09:00-10:00",text:"TANYA博多",desc:"早餐 牛舌燒肉定食",img:"https://meee.com.tw/bzimJBn.jpg"},
+{time:"10:00–14:00",text:"博多車站商圈",desc:"午餐  可吃：Lopia 超市 / 自理",img:"https://meee.com.tw/UQITNXd.jpg"},
+{time:"14:00–18:00",text:"天神商圈",desc:"晚餐 可吃：欣欣拉麵 / 兼虎沾麵 / 自理",img:"https://meee.com.tw/d9iHIyY.jpg"}
+]
+},
+{
+day:"Day7",
+items:[{time:"08:00–09:30",text:"出發",note:"約1.5小時",desc:"搭乘新幹線+JR+渡輪",img:"https://meee.com.tw/WdhnQJm.jpg"},
+{time:"09:30–11:00",text:"唐戶市場",desc:"早餐 海鮮市場",img:"https://meee.com.tw/rSI63qo.jpg"},
+{time:"11:00–12:30",text:"春帆樓+赤間神宮",desc:"步行關門海底隧道+潮風號小火車",img:"https://meee.com.tw/pNbwaDo.jpg"},
+{time:"12:30–16:00",text:"門司港懷舊地區",desc:"保有大量歐式歷史建築。必訪景點包括JR門司港站、藍翼門司吊橋、舊門司三井俱樂部及展望室",img:"https://meee.com.tw/EtqCHEK.jpg"},
+{time:"16:00–20:00",text:"小倉城",note:"或直接跳過回博多",desc:"晚餐 可吃資先生烏龍麵",img:"https://meee.com.tw/8hQSZdG.jpg"}
+]
+},
+{
+day:"Day8",
+items:[
+{time:"10:00–13:00",text:"大濠公園 / 福岡塔 / 自由活動",note:"⏱ 約3小時",desc:"市區經典景點",img:"https://meee.com.tw/QoN1Kx1.jpg"},
+{time:"15:00–21:00",text:"✈️ 航班 IT271 回程",note:"🛫 約18:55–20:35"}
+]
+}
+];
+
+const tabs = document.getElementById("tabs");
+const content = document.getElementById("content");
+
+data.forEach((d,i)=>{
+  let t=document.createElement("div");
+  t.className="tab";
+  t.innerText=d.day;
+  t.onclick=()=>showDay(i);
+  tabs.appendChild(t);
+
+  let day=document.createElement("div");
+  day.className="day";
+
+  let card=document.createElement("div");
+  card.className="card";
+
+  d.items.forEach(item=>{
+    let div=document.createElement("div");
+    div.className="item";
+
+    let id="exp"+Math.random();
+
+    div.innerHTML=`
+      <div class="time">${item.time}</div>
+      <div>${item.text} </div>
+      ${item.note?`<div class="note">${item.note}</div>`:""}
+
+      <div id="${id}" class="expand">
+        ${item.img ? `<img src="${item.img}">` : ""}
+        ${item.desc?`<div class="desc">${item.desc}</div>`:""}
+      </div>
+    `;
+
+    div.onclick=()=>{
+      document.getElementById(id).classList.toggle("active");
+    };
+
+    card.appendChild(div);
+  });
+
+  day.appendChild(card);
+  content.appendChild(day);
+});
+
+function showDay(i){
+  document.querySelectorAll(".day").forEach(d=>d.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+
+  document.querySelectorAll(".day")[i].classList.add("active");
+  document.querySelectorAll(".tab")[i].classList.add("active");
+}
+
+showDay(0);
+</script>
+
+</body>
+</html>
